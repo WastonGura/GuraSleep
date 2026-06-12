@@ -35,7 +35,7 @@ import com.example.gurasleep.ui.theme.StarWhite
 fun AudioCircle(
     circle: CircleBody,
     onDragStart: () -> Unit = {},
-    onDrag: (dx: Float, dy: Float) -> Unit = {},
+    onDrag: (dx: Float, dy: Float) -> Unit = { _, _ -> },
     onDragEnd: () -> Unit = {},
     isCollected: Boolean = false,
     modifier: Modifier = Modifier
