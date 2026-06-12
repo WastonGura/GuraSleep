@@ -29,6 +29,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.gurasleep.domain.model.SleepStage
+import com.example.gurasleep.ui.theme.DawnGold
 import com.example.gurasleep.ui.theme.DeepPurple700
 import com.example.gurasleep.ui.theme.DeepPurple800
 import com.example.gurasleep.ui.theme.DeepPurple900
@@ -176,6 +178,29 @@ fun SleepScreen(
                         uncheckedTrackColor = DeepPurple700
                     )
                 )
+            }
+        }
+
+        // ── 当前睡眠阶段（睡眠中显示）──
+        if (viewModel.isSleeping && viewModel.settings.sleepDetectionEnabled) {
+            SectionCard(title = "📊 检测状态") {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = viewModel.currentSleepStage.displayName,
+                        style = MaterialTheme.typography.displayLarge,
+                        color = when (viewModel.currentSleepStage) {
+                            SleepStage.AWAKE -> Lavender
+                            SleepStage.LIGHT -> MidnightGlow
+                            SleepStage.DEEP -> StarWhite
+                            SleepStage.REM -> DawnGold
+                        },
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
 

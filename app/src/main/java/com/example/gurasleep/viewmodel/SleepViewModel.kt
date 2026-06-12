@@ -3,13 +3,27 @@ package com.example.gurasleep.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.gurasleep.domain.detector.SleepDetector
 import com.example.gurasleep.domain.model.SleepSettings
 import com.example.gurasleep.domain.model.SleepStage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * 睡眠页状态管理
  */
 class SleepViewModel {
+
+    // 由外部注入（MainActivity 持有 Context 构造）
+    var sleepDetector: SleepDetector? = null
+
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
     var settings by mutableStateOf(SleepSettings())
         private set
@@ -64,12 +78,23 @@ class SleepViewModel {
         isSleeping = true
         remainingSeconds = settings.stopAfterMinutes * 60
         updateCountdownText()
+
+        if (settings.sleepDetectionEnabled) {
+            sleepDetector?.start()
+            scope.launch {
+                sleepDetector?.sleepStage?.collect { stage ->
+                    updateSleepStage(stage)
+                }
+            }
+        }
     }
 
     fun stopSleep() {
         isSleeping = false
         remainingSeconds = 0
         countdownText = ""
+        sleepDetector?.stop()
+        scope.cancel()
     }
 
     /** 每秒调用一次 */
