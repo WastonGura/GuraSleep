@@ -19,13 +19,17 @@ import com.example.gurasleep.ui.screens.SleepScreen
 import com.example.gurasleep.ui.theme.DeepPurple950
 import com.example.gurasleep.ui.theme.GuraSleepTheme
 import com.example.gurasleep.viewmodel.CaptureViewModel
+import com.example.gurasleep.viewmodel.SleepViewModel
 
 /**
  * 顶层 Composable
  *  导航: Dock 栏切换「捕获」「睡眠」两个标签页
  */
 @Composable
-fun GuraSleepApp(captureViewModel: CaptureViewModel) {
+fun GuraSleepApp(
+    captureViewModel: CaptureViewModel,
+    sleepViewModel: SleepViewModel
+) {
     val dockState = captureViewModel.dockState
 
     GuraSleepTheme {
@@ -46,7 +50,9 @@ fun GuraSleepApp(captureViewModel: CaptureViewModel) {
                         dockState = dockState,
                         onCirclesUpdate = { captureViewModel.updateCircles(it) }
                     )
-                    DockTab.SLEEP -> SleepScreen()
+                    DockTab.SLEEP -> SleepScreen(
+                        viewModel = sleepViewModel
+                    )
                 }
             }
 
