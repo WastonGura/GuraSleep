@@ -41,7 +41,11 @@ fun GuraSleepApp(captureViewModel: CaptureViewModel) {
                 label = "pageCrossfade"
             ) { tab ->
                 when (tab) {
-                    DockTab.CAPTURE -> CaptureScreen()
+                    DockTab.CAPTURE -> CaptureScreen(
+                        viewModel = captureViewModel,
+                        dockState = dockState,
+                        onCirclesUpdate = { captureViewModel.updateCircles(it) }
+                    )
                     DockTab.SLEEP -> SleepScreen()
                 }
             }
