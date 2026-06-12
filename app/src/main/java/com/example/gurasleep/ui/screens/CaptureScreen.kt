@@ -29,7 +29,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -56,7 +58,7 @@ fun CaptureScreen(
 ) {
     val circles = viewModel.circles
 
-    var dockAreaTop by remember { mutableStateOf(0f) }
+    val dockAreaTop = remember { mutableStateOf(0f) }
 
     Box(modifier = modifier.fillMaxSize()) {
         // 背景物理画布
@@ -80,7 +82,7 @@ fun CaptureScreen(
                     circle = circle,
                     onDragStart = { viewModel.onDragStart(circle.id) },
                     onDrag = { dx, dy -> viewModel.onDrag(circle.id, dx, dy) },
-                    onDragEnd = { viewModel.onDragEnd(circle.id, dockAreaTop) },
+                    onDragEnd = { viewModel.onDragEnd(circle.id, dockAreaTop.value) },
                     isCollected = false,
                     modifier = Modifier.offset {
                         IntOffset(
@@ -118,7 +120,9 @@ fun CaptureScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .padding(bottom = 100.dp, start = 20.dp, end = 20.dp)
-                .onSizeChanged { dockAreaTop = it.y.toFloat() }
+                .onGloballyPositioned { coordinates ->
+                    dockAreaTop.value = coordinates.positionInParent().y
+                }
         ) {
             if (dockState.collectedAudioIds.isNotEmpty()) {
                 // 已收集音频标签 + 播放/停止按钮
@@ -177,7 +181,7 @@ fun CaptureScreen(
                     Text("🔊", style = MaterialTheme.typography.labelLarge)
                     Slider(
                         value = viewModel.masterVolume,
-                        onValueChange = { viewModel.setMasterVolume(it) },
+                        onValueChange = { viewModel.updateMasterVolume(it) },
                         modifier = Modifier.weight(1f),
                         colors = SliderDefaults.colors(
                             thumbColor = MidnightGlow,

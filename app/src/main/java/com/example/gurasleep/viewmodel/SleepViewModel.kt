@@ -3,6 +3,7 @@ package com.example.gurasleep.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.example.gurasleep.domain.detector.SleepDetector
 import com.example.gurasleep.domain.model.SleepSettings
 import com.example.gurasleep.domain.model.SleepStage
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 /**
  * 睡眠页状态管理
  */
-class SleepViewModel {
+class SleepViewModel : ViewModel() {
 
     // 由外部注入（MainActivity 持有 Context 构造）
     var sleepDetector: SleepDetector? = null

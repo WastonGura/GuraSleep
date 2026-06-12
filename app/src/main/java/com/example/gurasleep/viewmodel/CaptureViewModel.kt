@@ -3,6 +3,7 @@ package com.example.gurasleep.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.compose.ui.geometry.Offset
 import com.example.gurasleep.R
 import com.example.gurasleep.domain.model.AudioCategory
@@ -22,7 +23,7 @@ import kotlin.random.Random
 /**
  * 捕获页状态管理
  */
-class CaptureViewModel {
+class CaptureViewModel : ViewModel() {
 
     // ── 音频库 ──
     val audioItems = listOf(
@@ -129,7 +130,7 @@ class CaptureViewModel {
         }
     }
 
-    fun setMasterVolume(vol: Float) {
+    fun updateMasterVolume(vol: Float) {
         masterVolume = vol.coerceIn(0f, 1f)
     }
 
