@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import com.example.gurasleep.R
 import com.example.gurasleep.domain.model.AudioCategory
 import com.example.gurasleep.domain.model.AudioItem
 import com.example.gurasleep.domain.model.CircleBody
@@ -25,14 +26,14 @@ class CaptureViewModel {
 
     // ── 音频库 ──
     val audioItems = listOf(
-        AudioItem("rain",    "雨声",   "🌧️",  0, RainColor,   AudioCategory.RAIN),
-        AudioItem("ocean",   "海浪",   "🌊",  0, OceanColor,  AudioCategory.OCEAN),
-        AudioItem("fire",    "篝火",   "🔥",  0, FireColor,   AudioCategory.NATURE),
-        AudioItem("wind",    "风铃",   "🎐",  0, WindColor,   AudioCategory.AMBIENT),
-        AudioItem("forest",  "森林",   "🌿",  0, ForestColor, AudioCategory.NATURE),
-        AudioItem("city",    "城市",   "🏙️",  0, UrbanColor,  AudioCategory.URBAN),
-        AudioItem("cafe",    "咖啡厅", "☕",  0, MistBlue,    AudioCategory.AMBIENT),
-        AudioItem("thunder", "雷声",   "⛈️",  0, RainColor,   AudioCategory.RAIN)
+        AudioItem("rain",    "雨声",   "🌧️",  R.raw.rain,    RainColor,   AudioCategory.RAIN),
+        AudioItem("ocean",   "海浪",   "🌊",  R.raw.ocean,   OceanColor,  AudioCategory.OCEAN),
+        AudioItem("fire",    "篝火",   "🔥",  R.raw.fire,    FireColor,   AudioCategory.NATURE),
+        AudioItem("wind",    "风铃",   "🎐",  R.raw.wind,    WindColor,   AudioCategory.AMBIENT),
+        AudioItem("forest",  "森林",   "🌿",  R.raw.forest,  ForestColor, AudioCategory.NATURE),
+        AudioItem("city",    "城市",   "🏙️",  R.raw.city,    UrbanColor,  AudioCategory.URBAN),
+        AudioItem("cafe",    "咖啡厅", "☕",  R.raw.cafe,    MistBlue,    AudioCategory.AMBIENT),
+        AudioItem("thunder", "雷声",   "⛈️",  R.raw.thunder, RainColor,   AudioCategory.RAIN)
     )
 
     // ── 圆形实体 ──
@@ -45,6 +46,12 @@ class CaptureViewModel {
 
     // 拖拽中的圆形 id
     var draggingCircleId: String? by mutableStateOf(null)
+        private set
+
+    // ── 播放状态 ──
+    var isPlaying by mutableStateOf(false)
+        private set
+    var masterVolume by mutableStateOf(0.8f)
         private set
 
     // Canvas 尺寸
@@ -120,5 +127,13 @@ class CaptureViewModel {
         circles = circles.map { c ->
             if (c.id == circleId) c.copy(isCollected = false) else c
         }
+    }
+
+    fun setMasterVolume(vol: Float) {
+        masterVolume = vol.coerceIn(0f, 1f)
+    }
+
+    fun togglePlay() {
+        isPlaying = !isPlaying
     }
 }
