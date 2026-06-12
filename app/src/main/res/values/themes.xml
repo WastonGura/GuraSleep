@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.GuraSleep" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- 基础主题：深色无 ActionBar，由 Compose 接管内容 -->
+    <style name="Theme.GuraSleep" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorBackground">#0D001A</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>
